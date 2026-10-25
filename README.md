@@ -1,5 +1,7 @@
 # Search Lab
 
+**[Explore the interactive project presentation](docs/overview.html)** — open locally in your browser; works offline.
+
 Build a searchable document collection and see why each result ranks where it does. Search Lab brings together TF-IDF, Boolean retrieval, relevance evaluation, and the text exercises from my information-retrieval coursework.
 
 ## Try it first
