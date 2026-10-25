@@ -86,6 +86,8 @@ def parse_documents(name, data, text_field='text', id_field='id'):
             reader = csv.DictReader(io.StringIO(text))
             if not reader.fieldnames or text_field not in reader.fieldnames:
                 raise ValueError(f'CSV must contain a {text_field!r} column.')
+            if len(set(reader.fieldnames)) != len(reader.fieldnames):
+                raise ValueError('CSV headers must be unique; duplicate columns would discard document values.')
             rows = list(reader)
         elif suffix in ('.jsonl', '.ndjson'):
             rows = [json.loads(line) for line in text.splitlines() if line.strip()]
@@ -214,6 +216,8 @@ class SearchIndex:
                      contribution=weight * document_vector.get(term, 0)) for term, weight in sorted(vector.items())]
 
     def keywords(self, document_id, k=10):
+        if type(k) is not int or k < 1:
+            raise ValueError("Keyword count must be a positive integer.")
         vector = self.vectors[self._by_id[document_id]]
         return [dict(term=term, weight=weight) for term, weight in sorted(vector.items(), key=lambda pair: (-pair[1], pair[0]))[:k]]
 
@@ -277,19 +281,27 @@ def evaluate_rankings(rankings, qrels, k=5):
     return dict(rows=rows, summary=summary)
 
 
+def _spreadsheet_cell(value):
+    if isinstance(value, str) and value.lstrip().startswith(("=", "+", "-", "@")):
+        return "'" + value
+    return value
+
+
 def results_csv(rows):
     if not rows:
         return ''
     buffer = io.StringIO(newline='')
     fields = list(dict.fromkeys(key for row in rows for key in row))
     writer = csv.DictWriter(buffer, fieldnames=fields)
-    writer.writeheader()
-    writer.writerows(rows)
+    writer.writerow({field: _spreadsheet_cell(field) for field in fields})
+    writer.writerows({key: _spreadsheet_cell(value) for key, value in row.items()} for row in rows)
     return buffer.getvalue()
 
 
 def xlsx_bytes(rows):
     import pandas as pd
     buffer = io.BytesIO()
-    pd.DataFrame(rows).to_excel(buffer, index=False, engine='openpyxl')
+    frame = pd.DataFrame(rows).map(_spreadsheet_cell)
+    frame.columns = [_spreadsheet_cell(column) for column in frame.columns]
+    frame.to_excel(buffer, index=False, engine='openpyxl')
     return buffer.getvalue()
