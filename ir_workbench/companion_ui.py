@@ -4,6 +4,7 @@ import hashlib
 import pandas as pd
 import streamlit as st
 from ir_workbench.companion_core import SCORES,train,load_pan
+from ir_workbench.core import results_csv
 
 def render():
     st.subheader('Companion labs')
@@ -55,7 +56,7 @@ def _lab(kind):
         return
     st.markdown('**Validation results**')
     st.dataframe(pd.DataFrame([metrics]),use_container_width=True)
-    st.download_button('Download validation predictions',report.to_csv(index=False),file_name=kind+'_validation.csv',key=key+'_validation')
+    st.download_button('Download validation predictions',results_csv(report.to_dict(orient='records')),file_name=kind+'_validation.csv',key=key+'_validation')
     with st.expander('Inspect learned vocabulary'):
         st.write(f'{len(model.vectorizer.vocabulary_):,} features; preprocessing was fitted separately inside each validation fold.')
         st.write(model.vectorizer.get_feature_names_out()[:80].tolist())
@@ -86,7 +87,7 @@ def _lab(kind):
             else:
                 for i,col in enumerate(SCORES): out[col]=predictions[:,i]
             st.dataframe(out.head(20),use_container_width=True)
-            st.download_button('Download batch predictions',out.to_csv(index=False),file_name=kind+'_predictions.csv',key=key+'_download')
+            st.download_button('Download batch predictions',results_csv(out.to_dict(orient='records')),file_name=kind+'_predictions.csv',key=key+'_download')
         except (ValueError,KeyError,TypeError) as exc: st.error(str(exc))
 
 

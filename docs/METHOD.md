@@ -13,7 +13,7 @@ python -m pip install -r requirements.txt
 python workbench.py
 ```
 
-The launcher starts the integrated Streamlit app on localhost. Stop it with Ctrl+C. On macOS/Linux use Python from an existing compatible environment; those platforms are untested. `requirements.txt` records direct dependencies; no full-environment lockfile is included. No NLTK corpus download is needed. `start.ps1` is optional when PowerShell scripts are allowed.
+The launcher starts the integrated Streamlit app on localhost. Stop it with Ctrl+C. On macOS/Linux use Python from an existing compatible environment; those platforms are untested. `requirements.txt` records direct dependencies. `requirements-lock.txt` is a historical Windows/Python snapshot, not the specification of your currently assigned Conda environment; do not apply it automatically. No NLTK corpus download is needed. `start.ps1` is optional when PowerShell scripts are allowed.
 
 ## Workflow
 

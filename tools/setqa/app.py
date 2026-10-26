@@ -1,6 +1,7 @@
 """Set QA — Streamlit UI. NUS CS3244 Kaggle Competition."""
 
 import os, sys, io, csv, tempfile
+from html import escape
 import subprocess
 
 def _is_streamlit():
@@ -64,14 +65,14 @@ def color_badge(etype):
 
 def event_card(ev, extra=""):
     c, b = color_badge(ev["event_type"])
-    char_part = (f"<span style='color:{GR};font-size:.85em'> [{ev['character']}"
-                 + (f" → <b style='color:{c}'>{ev['item']}</b>" if ev.get("item") else "")
+    char_part = (f"<span style='color:{GR};font-size:.85em'> [{escape(ev['character'])}"
+                 + (f" → <b style='color:{c}'>{escape(ev['item'])}</b>" if ev.get("item") else "")
                  + "]</span>") if ev.get("character") else ""
     st.markdown(
         f'<div style="border-left:4px solid {c};padding:5px 12px;margin:2px 0;border-radius:3px">'
         f'<span style="color:{GR};font-size:.78em">{ev["line_id"]}&nbsp;'
         f'<span style="color:{c}">{b}</span></span>&nbsp;&nbsp;'
-        f'{ev["sentence"]}{char_part}{extra}</div>', unsafe_allow_html=True)
+        f'{escape(ev["sentence"])}{char_part}{extra}</div>', unsafe_allow_html=True)
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
@@ -136,13 +137,13 @@ with tab1:
                 st.markdown(
                     f'<div style="background:#1a3a5c;border-left:4px solid {B};padding:6px 12px;'
                     f'margin:2px 0;border-radius:4px"><span style="color:{GR};font-size:.8em">'
-                    f'{s["line_id"]}</span>&nbsp;&nbsp;<span style="color:{B}">{s["text"]}</span>'
+                    f'{s["line_id"]}</span>&nbsp;&nbsp;<span style="color:{B}">{escape(s["text"])}</span>'
                     f'&nbsp;&nbsp;<span style="background:#144a2a;color:{G};padding:2px 8px;'
-                    f'border-radius:12px;font-size:.85em">→ {ans}</span></div>', unsafe_allow_html=True)
+                    f'border-radius:12px;font-size:.85em">→ {escape(ans)}</span></div>', unsafe_allow_html=True)
             else:
                 st.markdown(f'<div style="padding:4px 12px;margin:2px 0">'
                             f'<span style="color:{GR};font-size:.8em">{s["line_id"]}</span>'
-                            f'&nbsp;&nbsp;{s["text"]}</div>', unsafe_allow_html=True)
+                            f'&nbsp;&nbsp;{escape(s["text"])}</div>', unsafe_allow_html=True)
         st.divider()
 
         # Analytics
@@ -209,9 +210,9 @@ with tab2:
                 f'<div style="background:#1a1a2e;border-left:6px solid {c};padding:12px 20px;'
                 f'border-radius:6px;margin-bottom:12px"><div style="color:{GR};font-size:.8em">'
                 f'Line {ev["line_id"]} — <span style="color:{c}">{b}</span></div>'
-                f'<div style="font-size:1.1em;margin-top:4px">{ev["sentence"]}</div>'
-                + (f'<div style="margin-top:6px">Character: <b>{ev["character"]}</b>'
-                   + (f' → <b style="color:{c}">{ev["item"]}</b>' if ev.get("item") else "")
+                f'<div style="font-size:1.1em;margin-top:4px">{escape(ev["sentence"])}</div>'
+                + (f'<div style="margin-top:6px">Character: <b>{escape(ev["character"])}</b>'
+                   + (f' → <b style="color:{c}">{escape(ev["item"])}</b>' if ev.get("item") else "")
                    + "</div>" if ev.get("character") else "")
                 + "</div>", unsafe_allow_html=True)
             if ev["event_type"] == "question":

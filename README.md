@@ -64,6 +64,6 @@ python -m unittest discover -s tests -v
 
 See [method and usage](docs/METHOD.md) for capabilities, original comparisons, privacy rules and material limitations. Tests use synthetic data; full-size private corpora and all optional text-experiment configurations are not implied to be verified.
 
-Checked on Windows with Python 3.13.5 (Conda base): **27 tests passed**.
+Checked on Windows with Python 3.13.5 (Conda base): **30 tests passed**.
 
 Duplicate document CSV headers are rejected before values can be discarded. CSV/XLSX exports preserve formula-like document strings as text, and keyword limits are validated consistently.

@@ -241,6 +241,8 @@ def parse_qrels(data):
         reader = csv.DictReader(io.StringIO(text))
         if not reader.fieldnames or not {'query_id', 'doc_id'} <= set(reader.fieldnames):
             raise ValueError('Qrels CSV needs query_id and doc_id columns.')
+        if len(set(reader.fieldnames)) != len(reader.fieldnames):
+            raise ValueError('Qrels CSV headers must be unique; duplicate columns would discard judgments.')
         result = defaultdict(list)
         for row in reader:
             if not row.get('query_id') or not row.get('doc_id'):
