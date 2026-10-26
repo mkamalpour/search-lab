@@ -8,6 +8,22 @@ Build a searchable document collection and see why each result ranks where it do
 
 The demo collection is indexed when the app opens. Go to **Search**, enter `information retrieval`, and click **Search corpus**. Inspect a score, then import your own documents in **Corpus & preprocessing** and rebuild the index.
 
+<details>
+<summary>Using the existing managed Windows workspace</summary>
+
+Assigned environment: **base** — Python **3.13.5**, using the existing Conda environment `base`. Open `Workspaces/search-lab.code-workspace` from the workspace folder to select its interpreter.
+
+From this repository folder in PowerShell:
+
+```powershell
+& '..\Launchers\search-lab.cmd' --check --deep
+& '..\Launchers\search-lab.cmd'
+```
+
+The launcher activates the assigned environment and checks dependencies. It does not install packages or download models. These launchers belong to the managed parent workspace; for a standalone clone, follow the setup instructions below in your own compatible environment. Keep optional model/provider prerequisites separate from the offline examples.
+
+</details>
+
 ## Run
 
 Activate an existing Python/Conda environment with the requirements already available. Nothing is installed automatically.
