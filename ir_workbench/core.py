@@ -277,10 +277,14 @@ def evaluate_rankings(rankings, qrels, k=5):
         ideal = sum(1 / math.log2(i + 1) for i in range(1, min(k, len(relevant)) + 1))
         rows.append(dict(query_id=query_id, precision=precision, recall=recall,
                          f1=2 * precision * recall / (precision + recall) if precision + recall else 0,
-                         ap=ap, ndcg=dcg / ideal if ideal else 0))
+                         ap=ap, ndcg=dcg / ideal if ideal else 0,
+                         reciprocal_rank=next((1 / i for i, hit in enumerate(hits, 1) if hit), 0),
+                         returned_count=len(retrieved), relevant_count=len(relevant), hit_count=correct,
+                         retrieved_ids=retrieved, missed_relevant_ids=sorted(relevant - set(retrieved))))
     summary = {metric: sum(row[source] for row in rows) / len(rows)
-               for metric, source in [('precision', 'precision'), ('recall', 'recall'), ('f1', 'f1'), ('map', 'ap'), ('ndcg', 'ndcg')]}
-    return dict(rows=rows, summary=summary)
+               for metric, source in [('precision', 'precision'), ('recall', 'recall'), ('f1', 'f1'), ('map', 'ap'), ('ndcg', 'ndcg'), ('mrr', 'reciprocal_rank')]}
+    return dict(rows=rows, summary=summary, cutoff=k,
+                policy='Binary relevance; duplicate retrieved IDs count once; precision divides by k; AP divides by min(relevant count, k); unreturned judged queries score zero.')
 
 
 def _spreadsheet_cell(value):

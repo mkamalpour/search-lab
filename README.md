@@ -72,3 +72,9 @@ Duplicate document CSV headers are rejected before values can be discarded. CSV/
 
 See the [engineering audit](docs/ENGINEERING_AUDIT.md) for the dated test baseline,
 project assessment, environment assignment and remaining work.
+
+## Additional workflow improvements
+
+Retrieval evaluation adds MRR, per-query returned/relevant/hit counts, missed relevant IDs, full JSON export and explicit cutoff/metric policy.
+
+Evaluation → Evaluate rankings → Download full evaluation JSON. Queries missing a ranking still contribute zero to aggregate metrics.

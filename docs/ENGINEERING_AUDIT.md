@@ -26,7 +26,7 @@ VS Code's local interpreter settings were aligned with the same assignment.
 
 ## Verification
 
-- **Automated tests:** 30 passed.
+- **Automated tests:** 31 passed; 0 reported skips; 0 private-report cases deselected.
 - **Startup check:** `run.cmd --check` passed from outside the repository;
   required startup modules were imported in the assigned environment.
 - **Tested runtime:** Windows; Conda base; Python 3.13.5.
@@ -48,7 +48,7 @@ python -m pytest tests -q -p no:cacheprovider
 
 ## Next three upgrades
 
-1. Query-level error analysis.
+1. Judged public-corpus evaluation with per-query baselines.
 2. Reusable corpus import profiles.
 3. Measured indexing benchmarks.
 
@@ -58,3 +58,17 @@ for quality. These are proposed upgrades, not implemented features or measured s
 External assets: No model is needed; a public judged corpus is useful for genuine retrieval evaluation.
 
 No root license file is set. No license was selected or changed.
+
+## Additional implementation pass
+
+Retrieval evaluation adds MRR, per-query returned/relevant/hit counts, missed relevant IDs, full JSON export and explicit cutoff/metric policy.
+
+Use: Evaluation → Evaluate rankings → Download full evaluation JSON. Queries missing a ranking still contribute zero to aggregate metrics.
+
+Verification: the complete offline suite passed in the assigned **base**
+environment after this change (31 tests). Regression fixtures remain
+temporary/synthetic. Optional real-model/data quality and external integrations
+remain unverified. No packages, models or additional environments were installed.
+
+The earlier numeric scores are subjective historical assessments; new features do
+not automatically establish a higher score or production readiness.

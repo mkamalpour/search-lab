@@ -186,8 +186,10 @@ def main():
             except (ValueError,TypeError) as exc: st.error(str(exc))
         ev=ss.get('evaluation')
         if ev and not stale and qpayload and ev[:3]==(queries,qpayload,cutoff):
+            st.caption(ev[3]['policy'])
             st.json(ev[3]['summary']); st.dataframe(ev[3]['rows'],hide_index=True,use_container_width=True)
             st.download_button('Download evaluation',results_csv(ev[3]['rows']),'evaluation.csv')
+            st.download_button('Download full evaluation JSON',json.dumps(ev[3],ensure_ascii=False,indent=2),'evaluation.json','application/json')
     with tabs[5]:
         st.subheader('SetQA  -  objects through time')
         st.caption('Rule-based English inventory tracking. Number each story line; reset to 1 for a new story. Separate question and expected item names with a tab. Supports labeled evaluation and unlabeled submission files.')
